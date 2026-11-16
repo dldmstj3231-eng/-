@@ -1,0 +1,1497 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>나에게 맞는 직무 유형 테스트</title>
+    <meta
+      name="description"
+      content="조별과제, 동아리, 아르바이트 속 12가지 질문으로 나에게 어울리는 직무와 준비할 자격증·과목을 알아보세요."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-canvas: #f2fbf8;
+        --surface-card: #ffffff;
+        --surface-soft: #f8fdfa;
+        --surface-hover: #edf9f5;
+        --surface-selected: #e2f8f0;
+        --surface-mint: #e6f7f1;
+        --border-subtle: #cbece1;
+        --border-option: #d2eee4;
+        --divider: #e0f2ec;
+        --divider-light: #ebf6f2;
+        --ink-primary: #102a25;
+        --ink-secondary: #47655e;
+        --ink-muted: #577770;
+        --accent: #0f766e;
+        --accent-hover: #115e59;
+        --progress-track: #d9f2ea;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        font-family: "Plus Jakarta Sans", "Noto Sans KR", -apple-system, BlinkMacSystemFont,
+          "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+        background-color: var(--bg-canvas);
+        color: var(--ink-primary);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        word-break: keep-all;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        background-color: var(--bg-canvas);
+        display: flex;
+        flex-direction: column;
+      }
+
+      button {
+        font-family: inherit;
+      }
+
+      .tabular-nums {
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* Header */
+      .app-header {
+        width: 100%;
+        padding: 20px 20px 8px;
+      }
+
+      .header-inner {
+        max-width: 896px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .brand-btn {
+        background: none;
+        border: none;
+        padding: 4px 6px;
+        margin-left: -6px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: var(--ink-primary);
+        cursor: pointer;
+        white-space: nowrap;
+        transition: color 0.15s ease;
+      }
+
+      .brand-btn:hover {
+        color: var(--accent);
+      }
+
+      .home-btn {
+        background: none;
+        border: none;
+        padding: 6px 8px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--ink-secondary);
+        cursor: pointer;
+        white-space: nowrap;
+        transition: color 0.15s ease;
+      }
+
+      .home-btn:hover {
+        color: var(--ink-primary);
+      }
+
+      .brand-btn:focus-visible,
+      .home-btn:focus-visible,
+      .primary-btn:focus-visible,
+      .secondary-btn:focus-visible,
+      .back-btn:focus-visible,
+      .choice-btn:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      /* Main Layout */
+      .app-main {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 16px 40px;
+      }
+
+      .container-wide {
+        width: 100%;
+        max-width: 896px;
+        margin: 0 auto;
+      }
+
+      .container-quiz {
+        width: 100%;
+        max-width: 672px;
+        margin: 0 auto;
+      }
+
+      .card {
+        background-color: var(--surface-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: 24px;
+        box-shadow: 0 14px 36px -18px rgba(15, 118, 110, 0.16);
+        padding: 24px;
+      }
+
+      /* Start & Result Grids */
+      .start-grid,
+      .result-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 28px;
+        align-items: center;
+      }
+
+      .kicker {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--accent);
+        letter-spacing: -0.01em;
+      }
+
+      .hero-title {
+        margin: 12px 0 0;
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.24;
+        letter-spacing: -0.02em;
+        color: var(--ink-primary);
+        text-wrap: balance;
+      }
+
+      .hero-desc {
+        margin: 16px 0 0;
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--ink-secondary);
+      }
+
+      .role-line {
+        margin: 22px 0 0;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px 10px;
+        font-size: 13px;
+        color: var(--ink-muted);
+      }
+
+      .cta-wrap {
+        margin-top: 30px;
+      }
+
+      .primary-btn {
+        width: 100%;
+        min-height: 52px;
+        padding: 14px 28px;
+        border: none;
+        border-radius: 16px;
+        background-color: var(--accent);
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 8px 20px -8px rgba(15, 118, 110, 0.45);
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background-color 0.16s ease, transform 0.14s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .primary-btn:hover {
+        background-color: var(--accent-hover);
+        transform: scale(1.015);
+      }
+
+      .primary-btn:active {
+        transform: scale(0.975);
+      }
+
+      .secondary-btn {
+        width: 100%;
+        min-height: 50px;
+        padding: 12px 24px;
+        border: 1px solid var(--border-subtle);
+        border-radius: 16px;
+        background-color: #f4fbf8;
+        color: var(--accent-hover);
+        font-size: 15px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background-color 0.16s ease, transform 0.14s ease;
+      }
+
+      .secondary-btn:hover {
+        background-color: #e5f6ef;
+      }
+
+      .secondary-btn:active {
+        transform: scale(0.985);
+      }
+
+      .illustration-box {
+        width: 100%;
+        border-radius: 18px;
+        background-color: var(--surface-mint);
+        border: 1px solid var(--border-subtle);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .illustration-box.aspect-4-3 {
+        aspect-ratio: 4 / 3;
+      }
+
+      .illustration-box.aspect-1-1 {
+        aspect-ratio: 1 / 1;
+        max-width: 280px;
+        margin: 0 auto;
+      }
+
+      .illustration-box svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      /* Progress Bar */
+      .progress-wrap {
+        margin-bottom: 20px;
+      }
+
+      .progress-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 10px;
+        min-height: 40px;
+      }
+
+      .back-btn {
+        background: none;
+        border: none;
+        min-height: 40px;
+        padding: 4px 8px;
+        margin-left: -8px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--ink-secondary);
+        cursor: pointer;
+        white-space: nowrap;
+        transition: color 0.15s ease;
+      }
+
+      .back-btn:hover {
+        color: var(--ink-primary);
+      }
+
+      .back-btn:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+
+      .progress-label-muted {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--ink-muted);
+      }
+
+      .progress-count {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--accent);
+      }
+
+      .progress-track {
+        width: 100%;
+        height: 10px;
+        background-color: var(--progress-track);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background-color: var(--accent);
+        border-radius: 999px;
+        transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      /* Question Card */
+      .question-meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--accent);
+      }
+
+      .question-prompt {
+        margin: 12px 0 0;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.42;
+        color: var(--ink-primary);
+        text-wrap: balance;
+      }
+
+      .options-list {
+        margin-top: 26px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .choice-btn {
+        width: 100%;
+        min-height: 76px;
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid var(--border-option);
+        background-color: var(--surface-soft);
+        color: var(--ink-primary);
+        text-align: left;
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        cursor: pointer;
+        transition:
+          background-color 0.16s ease,
+          border-color 0.16s ease,
+          opacity 0.18s ease,
+          transform 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .choice-btn:hover:not(:disabled) {
+        background-color: var(--surface-hover);
+        transform: translateY(-2px);
+      }
+
+      .choice-btn:active:not(:disabled) {
+        transform: scale(0.985);
+      }
+
+      .choice-btn.is-selected {
+        background-color: var(--surface-selected);
+        border-color: var(--accent);
+      }
+
+      .choice-btn.is-bouncing {
+        animation: choiceBounce 0.26s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+
+      .choice-btn.is-dimmed {
+        opacity: 0.55;
+        transform: scale(0.99);
+      }
+
+      .choice-badge {
+        width: 28px;
+        height: 28px;
+        border-radius: 10px;
+        flex-shrink: 0;
+        margin-top: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        background-color: #e3f5ef;
+        color: var(--accent);
+        transition: background-color 0.16s ease, color 0.16s ease;
+      }
+
+      .choice-btn.is-selected .choice-badge {
+        background-color: var(--accent);
+        color: #ffffff;
+      }
+
+      .choice-text {
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.6;
+        color: var(--ink-primary);
+      }
+
+      /* Result Screen */
+      .result-nickname {
+        margin: 8px 0 0;
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--accent-hover);
+      }
+
+      .result-desc {
+        margin: 16px 0 0;
+        font-size: 15px;
+        line-height: 1.75;
+        color: var(--ink-secondary);
+      }
+
+      .section-divider {
+        margin: 32px 0;
+        border: none;
+        border-top: 1px solid var(--divider);
+      }
+
+      .rec-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .rec-title {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--ink-primary);
+      }
+
+      .rec-sub {
+        font-size: 13px;
+        color: var(--ink-muted);
+      }
+
+      .rec-list {
+        list-style: none;
+        margin: 20px 0 0;
+        padding: 0;
+      }
+
+      .rec-item {
+        padding: 16px 0;
+        border-top: 1px solid var(--divider-light);
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .rec-item:first-child {
+        border-top: none;
+        padding-top: 8px;
+      }
+
+      .rec-item:last-child {
+        padding-bottom: 4px;
+      }
+
+      .rec-num {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--accent);
+        width: 28px;
+        flex-shrink: 0;
+      }
+
+      .rec-name-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 4px 10px;
+      }
+
+      .rec-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--ink-primary);
+      }
+
+      .rec-cat {
+        font-size: 13px;
+        color: var(--ink-muted);
+      }
+
+      .rec-summary {
+        margin: 4px 0 0;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--ink-secondary);
+      }
+
+      .result-actions {
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid var(--divider);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      /* Animations */
+      .fade-enter {
+        animation: screenEnter 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .question-enter {
+        animation: questionEnter 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      @keyframes choiceBounce {
+        0% {
+          transform: scale(1);
+        }
+        42% {
+          transform: scale(1.035);
+        }
+        76% {
+          transform: scale(0.99);
+        }
+        100% {
+          transform: scale(1.01);
+        }
+      }
+
+      @keyframes screenEnter {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes questionEnter {
+        from {
+          opacity: 0;
+          transform: translateX(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .fade-enter,
+        .question-enter,
+        .choice-btn.is-bouncing {
+          animation: none !important;
+        }
+        .progress-fill,
+        .choice-btn,
+        .primary-btn {
+          transition: none !important;
+        }
+      }
+
+      @media (min-width: 640px) {
+        .app-header {
+          padding: 20px 32px 8px;
+        }
+        .brand-btn {
+          font-size: 16px;
+        }
+        .home-btn {
+          font-size: 14px;
+        }
+        .app-main {
+          padding: 36px 32px;
+        }
+        .card {
+          padding: 36px 40px;
+        }
+        .hero-title {
+          font-size: 36px;
+        }
+        .hero-desc {
+          font-size: 16px;
+        }
+        .primary-btn,
+        .secondary-btn {
+          width: auto;
+        }
+        .question-prompt {
+          font-size: 24px;
+        }
+        .choice-btn {
+          padding: 20px;
+        }
+        .choice-text {
+          font-size: 16px;
+        }
+        .rec-item {
+          flex-direction: row;
+          align-items: baseline;
+          gap: 20px;
+        }
+        .result-actions {
+          flex-direction: row;
+          align-items: center;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .start-grid {
+          grid-template-columns: 7fr 5fr;
+          gap: 36px;
+        }
+        .result-grid {
+          grid-template-columns: 5fr 7fr;
+          gap: 36px;
+        }
+        .illustration-box.aspect-1-1 {
+          max-width: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="header-inner">
+        <button type="button" id="brandHomeBtn" class="brand-btn">
+          나에게 맞는 직무 유형 테스트
+        </button>
+        <button type="button" id="headerHomeBtn" class="home-btn" hidden>
+          처음으로
+        </button>
+      </div>
+    </header>
+
+    <main id="appMain" class="app-main"></main>
+
+    <script>
+      const QUIZ_QUESTIONS = [
+        {
+          id: 1,
+          situation: '조별과제',
+          prompt: '첫 팀플 모임, 다들 어색하게 눈치만 보고 있다면 나는?',
+          options: [
+            {
+              id: 'A',
+              text: '“우리 목표랑 마감일부터 먼저 정할까요?” 역할을 나누고 일정을 짠다.',
+              role: 'pm',
+            },
+            {
+              id: 'B',
+              text: '“자료 모아서 바로 쓸 수 있게 공유 폴더랑 문서 틀부터 만들어둘게요.”',
+              role: 'dev',
+            },
+          ],
+        },
+        {
+          id: 2,
+          situation: '동아리',
+          prompt: '동아리 신입 부원 모집 포스터를 만들 때 가장 먼저 신경 쓰는 것은?',
+          options: [
+            {
+              id: 'A',
+              text: '지나가다 시선이 멈추도록 색감, 폰트 크기, 여백의 균형을 맞춘다.',
+              role: 'design',
+            },
+            {
+              id: 'B',
+              text: '작년 지원자가 가장 많이 들어온 채널과 반응 좋았던 문구를 찾아본다.',
+              role: 'data',
+            },
+          ],
+        },
+        {
+          id: 3,
+          situation: '아르바이트',
+          prompt: '카페 알바 중 점심 피크타임마다 주문이 밀려 정신이 없다. 이때 내 반응은?',
+          options: [
+            {
+              id: 'A',
+              text: '“포스기·음료 제조·픽업 안내로 동선을 나누자”며 팀 호흡을 맞춘다.',
+              role: 'pm',
+            },
+            {
+              id: 'B',
+              text: '“12시 반부터 아메리카노가 몰리니까 미리 샷을 내려두자”며 패턴을 활용한다.',
+              role: 'data',
+            },
+          ],
+        },
+        {
+          id: 4,
+          situation: '조별과제',
+          prompt: '발표 하루 전, 팀원들이 각자 만든 PPT 슬라이드를 하나로 합쳤더니 중구난방이다.',
+          options: [
+            {
+              id: 'A',
+              text: '목차 번호와 하이퍼링크, 페이지 흐름이 어긋난 곳 없이 작동하는지 점검한다.',
+              role: 'dev',
+            },
+            {
+              id: 'B',
+              text: '전체 컬러 톤과 도형 정렬, 표 여백을 통일해서 보기 편하게 다듬는다.',
+              role: 'design',
+            },
+          ],
+        },
+        {
+          id: 5,
+          situation: '학교생활',
+          prompt: '학과 축제 부스를 운영하게 됐다! 내가 가장 맡고 싶은 역할은?',
+          options: [
+            {
+              id: 'A',
+              text: '부스 콘셉트부터 예산 분배, 근무 시간표까지 전체 운영을 총괄한다.',
+              role: 'pm',
+            },
+            {
+              id: 'B',
+              text: '누가 봐도 들르고 싶어지도록 간판 배너와 굿즈, 메뉴판을 감각적으로 만든다.',
+              role: 'design',
+            },
+          ],
+        },
+        {
+          id: 6,
+          situation: '아르바이트',
+          prompt: '편의점 알바 중 창고 재고를 정리해야 할 때 나에게 더 편한 방식은?',
+          options: [
+            {
+              id: 'A',
+              text: '품목과 유통기한 규칙을 정해 누구든 바로 찾을 수 있게 구역을 체계화한다.',
+              role: 'dev',
+            },
+            {
+              id: 'B',
+              text: '최근 일주일 판매량을 확인해 잘 나가는 품목 위주로 발주 수량을 계산한다.',
+              role: 'data',
+            },
+          ],
+        },
+        {
+          id: 7,
+          situation: '동아리',
+          prompt: '동아리 홍보용 소개 페이지가 필요하다는 의견이 나왔다. 내가 먼저 하는 생각은?',
+          options: [
+            {
+              id: 'A',
+              text: '“신입생이 가장 궁금해할 Q&A랑 활동 일정이 맨 위에 보여야 해.”',
+              role: 'pm',
+            },
+            {
+              id: 'B',
+              text: '“모바일에서도 끊김 없이 열리도록 웹페이지나 폼 연동 구조부터 짜보자.”',
+              role: 'dev',
+            },
+          ],
+        },
+        {
+          id: 8,
+          situation: '조별과제',
+          prompt: '중간 발표 자료에 설문조사 결과를 넣어야 한다. 어떤 식으로 보여줄까?',
+          options: [
+            {
+              id: 'A',
+              text: '핵심 메시지가 바로 읽히도록 직관적인 아이콘과 카드 레이아웃으로 구성한다.',
+              role: 'design',
+            },
+            {
+              id: 'B',
+              text: '응답자 수와 항목별 비율 차이, 교차 수치를 빠짐없이 정확한 그래프로 정리한다.',
+              role: 'data',
+            },
+          ],
+        },
+        {
+          id: 9,
+          situation: '학교생활',
+          prompt: '다음 학기 수강신청 시간표를 짤 때 가장 중요하게 보는 기준은?',
+          options: [
+            {
+              id: 'A',
+              text: '대외활동, 알바, 팀플 일정까지 한 학기 전체 스케줄이 겹치지 않는지 본다.',
+              role: 'pm',
+            },
+            {
+              id: 'B',
+              text: '강의평 점수, 과제 수, 시험 비율 등 선배들의 후기 수치를 비교해 고른다.',
+              role: 'data',
+            },
+          ],
+        },
+        {
+          id: 10,
+          situation: '아르바이트',
+          prompt: '매장 키오스크 앞에서 손님들이 자꾸 주문을 헷갈려 한다. 내가 고친다면?',
+          options: [
+            {
+              id: 'A',
+              text: '품절 안내나 옵션 선택 단계가 꼬이지 않도록 화면 이동 조건을 논리적으로 고친다.',
+              role: 'dev',
+            },
+            {
+              id: 'B',
+              text: '버튼 크기와 메뉴 사진, 안내 문구 색상을 눈에 잘 띄게 바꿔 한눈에 읽히게 한다.',
+              role: 'design',
+            },
+          ],
+        },
+        {
+          id: 11,
+          situation: '동아리',
+          prompt: '동아리 단체 후드티를 맞추기 위해 모인 회의, 내가 꺼내는 첫 마디는?',
+          options: [
+            {
+              id: 'A',
+              text: '“이번 주 금요일까지 사이즈 조사 끝내고, 업체 두 곳 견적 비교해서 정하자!”',
+              role: 'pm',
+            },
+            {
+              id: 'B',
+              text: '“로고는 등판 중앙보다 왼쪽 가슴이 예쁠 듯해. 색감 시안 두 개 그려볼게.”',
+              role: 'design',
+            },
+          ],
+        },
+        {
+          id: 12,
+          situation: '조별과제',
+          prompt: '제출 직전, 공동 작업하던 파일의 수식이 깨지거나 내용이 일부 날아갔다!',
+          options: [
+            {
+              id: 'A',
+              text: '수정 기록과 오류 원인을 단계별로 거슬러 올라가며 작동하던 상태로 복구한다.',
+              role: 'dev',
+            },
+            {
+              id: 'B',
+              text: '원본 설문 시트와 참고 수치 메모를 대조해 틀어진 숫자가 없는지 처음부터 검증한다.',
+              role: 'data',
+            },
+          ],
+        },
+      ];
+
+      const ROLE_RESULTS = {
+        pm: {
+          type: 'pm',
+          title: '기획형 PM',
+          subtitle: '서비스 기획자 · 프로덕트 매니저',
+          nickname: '팀의 목표와 방향을 정리하는 나침반',
+          description:
+            '막연한 아이디어를 실행 가능한 일정과 우선순위로 정리하는 데 강점이 있어요. 팀원들의 강점을 파악해 역할을 나누고, 다양한 의견 사이에서 핵심 목표를 잃지 않도록 조율합니다. “왜 이걸 해야 하는지”와 “누구에게 필요한지”를 먼저 고민하기 때문에 서비스의 큰 그림을 그리는 기획 직무와 잘 맞아요.',
+          recommendations: [
+            {
+              name: '서비스 기획·프로젝트 관리 실무',
+              category: '교양 · 산학프로젝트 과목',
+              summary: '문제 정의부터 일정 관리, 팀 협업까지 실전 감각을 익히기 좋아요.',
+            },
+            {
+              name: 'SQLD (SQL 개발자)',
+              category: '국가공인 자격증',
+              summary:
+                '개발팀과 소통하고 직접 데이터를 뽑아 근거 있는 기획서를 쓰는 데 큰 도움이 됩니다.',
+            },
+            {
+              name: '경영정보시스템 · 마케팅 원론',
+              category: '전공 · 기초 과목',
+              summary: '사용자의 니즈와 시장 흐름을 읽는 기본 시야를 넓혀 줍니다.',
+            },
+          ],
+        },
+        dev: {
+          type: 'dev',
+          title: '논리형 개발자',
+          subtitle: '웹 · 앱 소프트웨어 엔지니어',
+          nickname: '복잡한 문제를 구조로 풀어내는 설계자',
+          description:
+            '문제가 생겼을 때 감에 의존하기보다 원인을 단계별로 쪼개고 규칙을 찾아 해결하는 스타일이에요. 반복되는 번거로운 과정을 정리하거나, 머릿속 아이디어를 실제로 작동하는 결과물로 완성할 때 큰 보람을 느낍니다. 차분한 집중력과 논리적인 사고력이 돋보여 소프트웨어 개발 직무에서 역량을 발휘하기 좋아요.',
+          recommendations: [
+            {
+              name: '정보처리기사',
+              category: '국가기술자격증',
+              summary:
+                '소프트웨어 설계, 데이터베이스, 운영체제 등 개발 전반의 기초 체력을 다질 수 있어요.',
+            },
+            {
+              name: '자료구조 · 알고리즘 기초',
+              category: '전공 · 교양 과목',
+              summary:
+                '문제를 효율적으로 푸는 사고력을 기르고 코딩 테스트 준비의 기반이 됩니다.',
+            },
+            {
+              name: '웹 프로그래밍 입문 (HTML/JS/Python)',
+              category: '교양 · 실습 과목',
+              summary:
+                '작은 웹사이트나 자동화 도구를 직접 만들어보며 적성을 확인하기 좋습니다.',
+            },
+          ],
+        },
+        design: {
+          type: 'design',
+          title: '감각형 디자이너',
+          subtitle: 'UX/UI · 프로덕트 디자이너',
+          nickname: '사용자의 불편을 줄이는 시각적 통역사',
+          description:
+            '같은 내용이라도 어떻게 배치하고 표현하느냐에 따라 전달력이 달라진다고 믿는 타입이에요. 일상 속 불편한 동선이나 어색한 화면을 남들보다 빠르게 눈치채고, 더 보기 좋고 쓰기 편한 형태로 다듬어내는 데 재능이 있습니다. 공감 능력과 섬세한 감각을 바탕으로 사용자 경험을 설계하는 UX/UI 디자인 직무가 잘 어울려요.',
+          recommendations: [
+            {
+              name: '인간컴퓨터상호작용 (HCI) · UI/UX 개론',
+              category: '전공 · 융합 과목',
+              summary:
+                '예쁜 그림을 넘어 사용자가 왜 편하게 느끼는지 원리를 배우는 핵심 수업이에요.',
+            },
+            {
+              name: '컴퓨터그래픽스운용기능사 · GTQ',
+              category: '국가공인 자격증',
+              summary: '디자인 툴 활용 능력을 객관적으로 증명하고 기초 작업을 익히기 좋습니다.',
+            },
+            {
+              name: '시각디자인 · 타이포그래피 기초',
+              category: '교양 · 실습 과목',
+              summary: '정보의 강약을 조절하는 레이아웃과 글꼴 감각을 탄탄하게 길러 줍니다.',
+            },
+          ],
+        },
+        data: {
+          type: 'data',
+          title: '분석형 데이터 애널리스트',
+          subtitle: '데이터 분석가 · 비즈니스 인텔리전스',
+          nickname: '숫자 속에서 진짜 힌트를 찾는 탐정',
+          description:
+            '“다들 좋대요”라는 막연한 느낌보다 직접 모은 수치와 기록을 확인해야 마음이 편한 스타일이에요. 흩어져 있던 정보를 표나 그래프로 정리해 숨어 있던 패턴을 발견하고, 객관적인 근거로 결론을 내릴 때 희열을 느낍니다. 꼼꼼한 관찰력과 검증 습관을 살려 데이터 분석 직무로 성장하기 좋아요.',
+          recommendations: [
+            {
+              name: 'ADsP (데이터분석 준전문가)',
+              category: '국가공인 자격증',
+              summary:
+                '비전공자도 도전하기 좋은 데이터 입문 자격증으로 기본 용어와 분석 흐름을 잡기 좋아요.',
+            },
+            {
+              name: '기초통계학 · 데이터 시각화',
+              category: '교양 · 전공 과목',
+              summary: '숫자를 해석해 설득력 있는 그래프와 인사이트로 풀어내는 힘을 기릅니다.',
+            },
+            {
+              name: 'SQLD · 파이썬 데이터 분석 기초',
+              category: '자격 · 실습 과목',
+              summary: '원하는 데이터를 직접 추출하고 정리하는 실무 기본기를 다질 수 있어요.',
+            },
+          ],
+        },
+      };
+
+      const ILLUSTRATIONS = {
+        hero: `
+          <svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="노트북과 노트, 나침반 일러스트">
+            <rect width="400" height="300" fill="#E6F7F1"/>
+            <circle cx="315" cy="70" r="46" fill="#D2F1E6"/>
+            <rect x="64" y="180" width="272" height="22" rx="11" fill="#CBECE1"/>
+            <rect x="116" y="76" width="168" height="110" rx="12" fill="#0F766E"/>
+            <rect x="126" y="86" width="148" height="90" rx="6" fill="#FFFDF9"/>
+            <rect x="142" y="104" width="68" height="10" rx="5" fill="#99DFCA"/>
+            <rect x="142" y="124" width="112" height="8" rx="4" fill="#DCEFE8"/>
+            <rect x="142" y="140" width="90" height="8" rx="4" fill="#DCEFE8"/>
+            <path d="M96 186H304L316 202H84L96 186Z" fill="#115E59"/>
+            <rect x="64" y="148" width="58" height="44" rx="6" fill="#FFFDF9" stroke="#0F766E" stroke-width="2.5"/>
+            <line x1="74" y1="162" x2="112" y2="162" stroke="#99DFCA" stroke-width="3" stroke-linecap="round"/>
+            <line x1="74" y1="174" x2="104" y2="174" stroke="#DCEFE8" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="314" cy="176" r="26" fill="#FFFDF9" stroke="#0F766E" stroke-width="3"/>
+            <polygon points="314,158 321,176 314,194 307,176" fill="#0F766E"/>
+            <polygon points="314,158 321,176 314,176" fill="#E79E6B"/>
+          </svg>
+        `,
+        pm: `
+          <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="기획형 PM 일러스트">
+            <rect width="300" height="300" fill="#E6F7F1"/>
+            <path d="M62 96H238" stroke="#0F766E" stroke-width="3" stroke-linecap="round"/>
+            <path d="M62 154H238" stroke="#0F766E" stroke-width="3" stroke-linecap="round"/>
+            <path d="M62 212H184" stroke="#0F766E" stroke-width="3" stroke-linecap="round"/>
+            <rect x="68" y="68" width="76" height="38" rx="10" fill="#0F766E"/>
+            <rect x="164" y="68" width="70" height="38" rx="10" fill="#E79E6B"/>
+            <rect x="92" y="126" width="92" height="38" rx="10" fill="#FFFDF9" stroke="#0F766E" stroke-width="2.5"/>
+            <rect x="68" y="184" width="84" height="38" rx="10" fill="#115E59"/>
+            <circle cx="224" cy="212" r="30" fill="#FFFDF9" stroke="#0F766E" stroke-width="3"/>
+            <polygon points="224,192 232,212 224,232 216,212" fill="#0F766E"/>
+            <circle cx="224" cy="212" r="4" fill="#FFFDF9"/>
+          </svg>
+        `,
+        dev: `
+          <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="논리형 개발자 일러스트">
+            <rect width="300" height="300" fill="#E6F7F1"/>
+            <rect x="58" y="66" width="184" height="124" rx="14" fill="#102A25"/>
+            <rect x="68" y="76" width="164" height="104" rx="8" fill="#FFFDF9"/>
+            <path d="M114 116L94 128L114 140" stroke="#0F766E" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M186 116L206 128L186 140" stroke="#0F766E" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="158" y1="108" x2="142" y2="148" stroke="#64748B" stroke-width="5" stroke-linecap="round"/>
+            <rect x="74" y="206" width="44" height="28" rx="7" fill="#0F766E"/>
+            <rect x="128" y="206" width="44" height="28" rx="7" fill="#99DFCA"/>
+            <rect x="182" y="206" width="44" height="28" rx="7" fill="#115E59"/>
+            <line x1="118" y1="220" x2="128" y2="220" stroke="#0F766E" stroke-width="3"/>
+            <line x1="172" y1="220" x2="182" y2="220" stroke="#0F766E" stroke-width="3"/>
+          </svg>
+        `,
+        design: `
+          <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="감각형 디자이너 일러스트">
+            <rect width="300" height="300" fill="#E6F7F1"/>
+            <rect x="56" y="64" width="118" height="156" rx="12" fill="#FFFDF9" stroke="#0F766E" stroke-width="2.5"/>
+            <rect x="72" y="82" width="86" height="50" rx="8" fill="#CBECE1"/>
+            <circle cx="94" cy="158" r="14" fill="#0F766E"/>
+            <rect x="116" y="148" width="42" height="8" rx="4" fill="#99DFCA"/>
+            <rect x="116" y="162" width="32" height="8" rx="4" fill="#DCEFE8"/>
+            <rect x="72" y="186" width="86" height="18" rx="9" fill="#0F766E"/>
+            <path d="M196 86C236 86 244 134 210 156C176 178 190 222 232 222" stroke="#0F766E" stroke-width="3.5" stroke-linecap="round"/>
+            <circle cx="196" cy="86" r="6" fill="#E89E38"/>
+            <circle cx="210" cy="156" r="6" fill="#0F766E"/>
+            <circle cx="232" cy="222" r="6" fill="#E89E38"/>
+            <rect x="192" y="114" width="54" height="18" rx="5" fill="#E89E38"/>
+          </svg>
+        `,
+        data: `
+          <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="분석형 데이터 애널리스트 일러스트">
+            <rect width="300" height="300" fill="#E6F7F1"/>
+            <rect x="58" y="162" width="26" height="62" rx="6" fill="#99DFCA"/>
+            <rect x="94" y="132" width="26" height="92" rx="6" fill="#0F766E"/>
+            <rect x="130" y="96" width="26" height="128" rx="6" fill="#115E59"/>
+            <circle cx="172" cy="146" r="46" fill="#FFFDF9" stroke="#102A25" stroke-width="6"/>
+            <polyline points="148,160 164,142 178,150 196,128" stroke="#536895" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="148" cy="160" r="4" fill="#0F766E"/>
+            <circle cx="164" cy="142" r="4" fill="#0F766E"/>
+            <circle cx="178" cy="150" r="4" fill="#0F766E"/>
+            <circle cx="196" cy="128" r="4" fill="#0F766E"/>
+            <line x1="205" y1="180" x2="238" y2="214" stroke="#102A25" stroke-width="10" stroke-linecap="round"/>
+          </svg>
+        `,
+      };
+
+      const state = {
+        step: 'start',
+        currentIndex: 0,
+        answers: {},
+        isTransitioning: false,
+        timerId: null,
+        copied: false,
+      };
+
+      const appMain = document.getElementById('appMain');
+      const brandHomeBtn = document.getElementById('brandHomeBtn');
+      const headerHomeBtn = document.getElementById('headerHomeBtn');
+
+      function calculateRoleResult(answers) {
+        const scores = {pm: 0, dev: 0, design: 0, data: 0};
+
+        for (const q of QUIZ_QUESTIONS) {
+          const choiceId = answers[q.id];
+          const selected = q.options.find((opt) => opt.id === choiceId);
+          if (selected) {
+            scores[selected.role] += 1;
+          }
+        }
+
+        const maxScore = Math.max(...Object.values(scores));
+        const tiedRoles = Object.keys(scores).filter((role) => scores[role] === maxScore);
+
+        if (tiedRoles.length === 1) {
+          return ROLE_RESULTS[tiedRoles[0]];
+        }
+
+        const headToHead = {pm: 0, dev: 0, design: 0, data: 0};
+        for (const q of QUIZ_QUESTIONS) {
+          const [optA, optB] = q.options;
+          if (tiedRoles.includes(optA.role) && tiedRoles.includes(optB.role)) {
+            const choiceId = answers[q.id];
+            const selected = q.options.find((opt) => opt.id === choiceId);
+            if (selected) {
+              headToHead[selected.role] += 1;
+            }
+          }
+        }
+
+        tiedRoles.sort((a, b) => headToHead[b] - headToHead[a]);
+        return ROLE_RESULTS[tiedRoles[0]];
+      }
+
+      function clearPendingTimer() {
+        if (state.timerId !== null) {
+          window.clearTimeout(state.timerId);
+          state.timerId = null;
+        }
+      }
+
+      function resetToStart() {
+        clearPendingTimer();
+        state.step = 'start';
+        state.currentIndex = 0;
+        state.answers = {};
+        state.isTransitioning = false;
+        state.copied = false;
+        render();
+      }
+
+      function startQuiz() {
+        clearPendingTimer();
+        state.step = 'quiz';
+        state.currentIndex = 0;
+        state.answers = {};
+        state.isTransitioning = false;
+        state.copied = false;
+        render();
+      }
+
+      function handleBack() {
+        if (state.isTransitioning || state.currentIndex <= 0) return;
+        state.currentIndex -= 1;
+        render();
+      }
+
+      function handleSelectOption(choiceId) {
+        if (state.step !== 'quiz' || state.isTransitioning) return;
+
+        state.isTransitioning = true;
+        const question = QUIZ_QUESTIONS[state.currentIndex];
+        const buttons = appMain.querySelectorAll('.choice-btn');
+
+        buttons.forEach((btn) => {
+          btn.disabled = true;
+          const optId = btn.getAttribute('data-choice');
+          if (optId === choiceId) {
+            btn.classList.add('is-selected', 'is-bouncing');
+            btn.setAttribute('aria-checked', 'true');
+            const badge = btn.querySelector('.choice-badge');
+            if (badge) {
+              badge.innerHTML =
+                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
+            }
+          } else {
+            btn.classList.remove('is-selected');
+            btn.classList.add('is-dimmed');
+            btn.setAttribute('aria-checked', 'false');
+          }
+        });
+
+        clearPendingTimer();
+        state.timerId = window.setTimeout(() => {
+          state.timerId = null;
+          state.answers[question.id] = choiceId;
+          state.isTransitioning = false;
+
+          if (state.currentIndex + 1 < QUIZ_QUESTIONS.length) {
+            state.currentIndex += 1;
+          } else {
+            state.step = 'result';
+          }
+          render();
+        }, 280);
+      }
+
+      async function handleCopySummary(result) {
+        const summaryText = [
+          '[나에게 맞는 직무 유형 테스트 결과]',
+          `유형: ${result.title} (${result.subtitle})`,
+          `한 줄 별명: ${result.nickname}`,
+          `추천 준비: ${result.recommendations.map((item) => item.name).join(', ')}`,
+        ].join('\n');
+
+        let success = false;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          try {
+            await navigator.clipboard.writeText(summaryText);
+            success = true;
+          } catch (_) {
+            success = false;
+          }
+        }
+
+        if (!success) {
+          const textarea = document.createElement('textarea');
+          textarea.value = summaryText;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          try {
+            success = document.execCommand('copy');
+          } catch (_) {
+            success = false;
+          }
+          document.body.removeChild(textarea);
+        }
+
+        if (success) {
+          state.copied = true;
+          const copyBtn = document.getElementById('copyResultBtn');
+          if (copyBtn) {
+            copyBtn.innerHTML =
+              '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>결과를 복사했어요</span>';
+          }
+          window.setTimeout(() => {
+            if (state.step === 'result') {
+              state.copied = false;
+              const btn = document.getElementById('copyResultBtn');
+              if (btn) {
+                btn.innerHTML =
+                  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>결과 요약 복사</span>';
+              }
+            }
+          }, 2000);
+        }
+      }
+
+      function renderStart() {
+        appMain.innerHTML = `
+          <section class="container-wide fade-enter">
+            <div class="card">
+              <div class="start-grid">
+                <div>
+                  <p class="kicker">대학생 2~4학년 진로 탐색 · 12문항 · 약 2분</p>
+                  <h1 class="hero-title">나에게 맞는 직무 유형 테스트</h1>
+                  <p class="hero-desc">
+                    아직 직무가 막막해도 괜찮아요. 조별과제, 동아리, 아르바이트에서 내가 편하게
+                    느끼는 행동을 고르다 보면 어울리는 직무와 지금 준비할 것들을 바로 확인할 수 있어요.
+                  </p>
+                  <div class="role-line">
+                    <span>기획형 PM</span>
+                    <span aria-hidden="true">·</span>
+                    <span>논리형 개발자</span>
+                    <span aria-hidden="true">·</span>
+                    <span>감각형 디자이너</span>
+                    <span aria-hidden="true">·</span>
+                    <span>분석형 데이터</span>
+                  </div>
+                  <div class="cta-wrap">
+                    <button type="button" id="startBtn" class="primary-btn">
+                      <span>시작하기</span>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <div class="illustration-box aspect-4-3">
+                    ${ILLUSTRATIONS.hero}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+
+        document.getElementById('startBtn').addEventListener('click', startQuiz);
+      }
+
+      function renderQuiz() {
+        const question = QUIZ_QUESTIONS[state.currentIndex];
+        const total = QUIZ_QUESTIONS.length;
+        const progressPercent = ((state.currentIndex + 1) / total) * 100;
+        const savedChoice = state.answers[question.id];
+
+        const leftControlHtml =
+          state.currentIndex > 0
+            ? `<button type="button" id="backBtn" class="back-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>이전</span>
+              </button>`
+            : '<span class="progress-label-muted">일하는 스타일 진단</span>';
+
+        const optionsHtml = question.options
+          .map((opt) => {
+            const isSelected = savedChoice === opt.id;
+            const badgeInner = isSelected
+              ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>'
+              : opt.id;
+
+            return `
+              <button
+                type="button"
+                role="radio"
+                aria-checked="${isSelected}"
+                data-choice="${opt.id}"
+                class="choice-btn ${isSelected ? 'is-selected' : ''}"
+              >
+                <span class="choice-badge">${badgeInner}</span>
+                <span class="choice-text">${opt.text}</span>
+              </button>
+            `;
+          })
+          .join('');
+
+        appMain.innerHTML = `
+          <section class="container-quiz">
+            <div class="progress-wrap">
+              <div class="progress-meta">
+                <div>${leftControlHtml}</div>
+                <p class="progress-count tabular-nums">${state.currentIndex + 1}/${total}</p>
+              </div>
+              <div
+                class="progress-track"
+                role="progressbar"
+                aria-valuenow="${state.currentIndex + 1}"
+                aria-valuemin="1"
+                aria-valuemax="${total}"
+                aria-label="진행률 ${state.currentIndex + 1} / ${total}"
+              >
+                <div class="progress-fill" style="width: ${progressPercent}%"></div>
+              </div>
+            </div>
+
+            <div class="card question-enter">
+              <div class="question-meta">
+                <span>${question.situation}</span>
+                <span aria-hidden="true">·</span>
+                <span class="tabular-nums">질문 ${String(state.currentIndex + 1).padStart(2, '0')}</span>
+              </div>
+              <h2 class="question-prompt">${question.prompt}</h2>
+              <div class="options-list" role="radiogroup" aria-label="${question.prompt}">
+                ${optionsHtml}
+              </div>
+            </div>
+          </section>
+        `;
+
+        const backBtn = document.getElementById('backBtn');
+        if (backBtn) {
+          backBtn.addEventListener('click', handleBack);
+        }
+
+        appMain.querySelectorAll('.choice-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            handleSelectOption(btn.getAttribute('data-choice'));
+          });
+        });
+      }
+
+      function renderResult() {
+        const result = calculateRoleResult(state.answers);
+
+        const recHtml = result.recommendations
+          .map(
+            (item, idx) => `
+              <li class="rec-item">
+                <span class="rec-num tabular-nums">${String(idx + 1).padStart(2, '0')}.</span>
+                <div>
+                  <div class="rec-name-row">
+                    <span class="rec-name">${item.name}</span>
+                    <span class="rec-cat">· ${item.category}</span>
+                  </div>
+                  <p class="rec-summary">${item.summary}</p>
+                </div>
+              </li>
+            `
+          )
+          .join('');
+
+        appMain.innerHTML = `
+          <section class="container-wide fade-enter">
+            <div class="card">
+              <div class="result-grid">
+                <div>
+                  <div class="illustration-box aspect-1-1">
+                    ${ILLUSTRATIONS[result.type]}
+                  </div>
+                </div>
+                <div>
+                  <p class="kicker">나의 직무 유형 · ${result.subtitle}</p>
+                  <h1 class="hero-title">${result.title}</h1>
+                  <p class="result-nickname">“${result.nickname}”</p>
+                  <p class="result-desc">${result.description}</p>
+                </div>
+              </div>
+
+              <hr class="section-divider" />
+
+              <div>
+                <div class="rec-header">
+                  <h2 class="rec-title">지금부터 준비해보면 좋은 자격증 · 과목 3가지</h2>
+                  <span class="rec-sub">부담 없이 1개부터 시작해 보세요</span>
+                </div>
+                <ol class="rec-list">
+                  ${recHtml}
+                </ol>
+              </div>
+
+              <div class="result-actions">
+                <button type="button" id="restartBtn" class="primary-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="1 4 1 10 7 10"></polyline>
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                  </svg>
+                  <span>다시하기</span>
+                </button>
+                <button type="button" id="copyResultBtn" class="secondary-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span>결과 요약 복사</span>
+                </button>
+              </div>
+            </div>
+          </section>
+        `;
+
+        document.getElementById('restartBtn').addEventListener('click', resetToStart);
+        document
+          .getElementById('copyResultBtn')
+          .addEventListener('click', () => handleCopySummary(result));
+      }
+
+      function render() {
+        headerHomeBtn.hidden = state.step === 'start';
+
+        if (state.step === 'start') {
+          renderStart();
+        } else if (state.step === 'quiz') {
+          renderQuiz();
+        } else {
+          renderResult();
+        }
+      }
+
+      brandHomeBtn.addEventListener('click', resetToStart);
+      headerHomeBtn.addEventListener('click', resetToStart);
+
+      window.addEventListener('keydown', (event) => {
+        if (state.step !== 'quiz' || state.isTransitioning) return;
+        if (event.key === '1') {
+          handleSelectOption('A');
+        } else if (event.key === '2') {
+          handleSelectOption('B');
+        }
+      });
+
+      render();
+    </script>
+  </body>
+</html>
